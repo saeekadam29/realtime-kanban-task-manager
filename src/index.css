@@ -1,0 +1,496 @@
+/* ===========================================================================
+   DESIGN TOKENS
+   A "developer workspace" palette — cool neutral surface, deep navy header,
+   indigo as the single accent, JetBrains Mono reserved for numbers/counters
+   so the board reads like a tool built for engineers, not a marketing page.
+   =========================================================================== */
+:root {
+  --color-bg: #eef1f6;
+  --color-surface: #ffffff;
+  --color-header: #101828;
+  --color-header-text: #f4f6f9;
+  --color-border: #dfe4ec;
+  --color-text: #1c2333;
+  --color-text-muted: #667085;
+
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+
+  --color-todo: #667085;
+  --color-inprogress: #4f46e5;
+  --color-completed: #0d9488;
+
+  --color-high: #e63946;
+  --color-high-bg: #fdecee;
+  --color-medium: #b45309;
+  --color-medium-bg: #fef3dc;
+  --color-low: #0d9488;
+  --color-low-bg: #e3f6f3;
+
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 14px rgba(16, 24, 40, 0.1);
+  --shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.22);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible keyboard focus everywhere — accessibility floor, not optional */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ===========================================================================
+   LAYOUT SHELL
+   =========================================================================== */
+.app-shell {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+  min-height: 100%;
+}
+
+/* ===========================================================================
+   HEADER
+   =========================================================================== */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 28px;
+  margin: 0 -24px 20px;
+  background: var(--color-header);
+  color: var(--color-header-text);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.app-header__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-header__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.app-header__subtitle {
+  font-size: 0.85rem;
+  color: #9aa4bd;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.counter-chip {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: inherit;
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
+.kanban-column__header .counter-chip {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* ===========================================================================
+   BUTTONS
+   =========================================================================== */
+.btn {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+.btn--ghost:hover {
+  background: var(--color-bg);
+}
+
+.btn__icon {
+  font-weight: 700;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  line-height: 1;
+}
+
+.icon-btn:hover {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.icon-btn--danger:hover {
+  color: var(--color-high);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+/* ===========================================================================
+   FILTER BAR
+   =========================================================================== */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.filter-bar__search {
+  flex: 1 1 260px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+}
+
+.filter-bar__select {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  color: var(--color-text);
+}
+
+.filter-bar__result-count {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* ===========================================================================
+   BOARD — CSS Grid for the 3 side-by-side columns
+   =========================================================================== */
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 880px) {
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kanban-column {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.kanban-column--drag-over {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  background: #f5f4ff;
+}
+
+.kanban-column__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--color-border);
+}
+
+.kanban-column__header h2 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.kanban-column__header--todo {
+  border-bottom-color: var(--color-todo);
+}
+
+.kanban-column__header--inprogress {
+  border-bottom-color: var(--color-inprogress);
+}
+
+.kanban-column__header--completed {
+  border-bottom-color: var(--color-completed);
+}
+
+.kanban-column__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kanban-column__empty {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 18px 0;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  margin: 0;
+}
+
+/* ===========================================================================
+   TASK CARD — Flexbox for internal layout
+   =========================================================================== */
+.task-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: grab;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.task-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.task-card:active {
+  cursor: grabbing;
+}
+
+.task-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.task-card__icon-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.task-card__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.task-card__desc {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.task-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+/* Priority badges — red / amber / green, color-coded per requirement */
+.badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.badge--high {
+  color: var(--color-high);
+  background: var(--color-high-bg);
+}
+
+.badge--medium {
+  color: var(--color-medium);
+  background: var(--color-medium-bg);
+}
+
+.badge--low {
+  color: var(--color-low);
+  background: var(--color-low-bg);
+}
+
+/* ===========================================================================
+   MODAL
+   =========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 24, 40, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+
+.modal-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 440px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-card__header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.modal-card__close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted);
+}
+
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 22px 22px;
+}
+
+.task-form__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-top: 10px;
+}
+
+.task-form__input,
+.task-form__textarea,
+.task-form__select {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  resize: vertical;
+}
+
+.task-form__error {
+  color: var(--color-high);
+  font-size: 0.8rem;
+  margin: 4px 0 0;
+}
+
+.task-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
